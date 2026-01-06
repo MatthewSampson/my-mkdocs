@@ -1,0 +1,26 @@
+site_name: My Working List
+site_url: https://lipeilin.github.io  # 之后换成你的域名
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.sections
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+
+nav:
+  - Home: index.md
+  - Working List: working-list.md
+  - Notes:
+      - Weekly: weekly.md
+      - Ideas: ideas.md
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.superfences
