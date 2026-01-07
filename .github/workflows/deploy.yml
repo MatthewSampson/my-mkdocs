@@ -1,20 +1,14 @@
-name: Deploy MkDocs to GitHub Pages
+name: Deploy to gh-pages
 
 on:
   push:
     branches: ["main"]
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  contents: write
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,30 +17,14 @@ jobs:
         with:
           python-version: "3.11"
 
-      # ⭐ 关键：告诉 MkDocs 它部署在 /my-mkdocs/
-      - uses: actions/configure-pages@v5
-        id: pages
-
       - run: pip install mkdocs mkdocs-material
+      - run: mkdocs build --strict
 
-      # ⭐ 关键：把正确的 base URL 写进 site_url
-      - run: |
-          sed -i "s|^site_url:.*|site_url: ${{ steps.pages.outputs.base_url }}/|" mkdocs.yml
-          mkdocs build --strict
-
+      # 自检：确保首页存在
       - run: ls -la site && test -f site/index.html
-      - run: touch site/.nojekyll
 
-      - uses: actions/upload-pages-artifact@v3
+      # 把 site/ 推到 gh-pages 分支
+      - uses: peaceiris/actions-gh-pages@v4
         with:
-          path: site
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
