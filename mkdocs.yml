@@ -1,5 +1,5 @@
 site_name: My Working List
-site_url: https://lipeilin.github.io  # 之后换成你的域名
+site_url: https://matthewsampson.github.io/my-mkdocs/  # 之后换成你的域名
 theme:
   name: material
   features:
