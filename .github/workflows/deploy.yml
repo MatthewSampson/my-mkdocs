@@ -27,7 +27,7 @@ jobs:
         id: pages
 
       - run: pip install mkdocs mkdocs-material
-      - run: mkdocs build --strict --site-url "${{ steps.pages.outputs.base_url }}/"
+      - run: mkdocs build --strict
 
       # 自检：确保确实生成了 index.html
       - run: ls -la site && test -f site/index.html
