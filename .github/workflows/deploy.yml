@@ -23,14 +23,19 @@ jobs:
         with:
           python-version: "3.11"
 
+      # ⭐ 关键：告诉 MkDocs 它部署在 /my-mkdocs/
       - uses: actions/configure-pages@v5
         id: pages
 
       - run: pip install mkdocs mkdocs-material
-      - run: mkdocs build --strict
 
-      # 自检：确保确实生成了 index.html
+      # ⭐ 关键：把正确的 base URL 写进 site_url
+      - run: |
+          sed -i "s|^site_url:.*|site_url: ${{ steps.pages.outputs.base_url }}/|" mkdocs.yml
+          mkdocs build --strict
+
       - run: ls -la site && test -f site/index.html
+      - run: touch site/.nojekyll
 
       - uses: actions/upload-pages-artifact@v3
         with:
